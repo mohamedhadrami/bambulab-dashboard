@@ -1,0 +1,52 @@
+{
+  "name": "bambulab-dashboard",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "server": "node server/mqttWebSocket.js",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@monaco-editor/react": "^4.6.0",
+    "@nextui-org/react": "^2.4.2",
+    "@radix-ui/react-dialog": "^1.1.1",
+    "@radix-ui/react-slot": "^1.1.0",
+    "@radix-ui/react-toast": "^1.2.1",
+    "@tailwindcss/typography": "^0.5.13",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.1.1",
+    "embla-carousel-react": "^8.1.6",
+    "framer-motion": "^11.2.13",
+    "fs": "^0.0.1-security",
+    "jwt-decode": "^4.0.0",
+    "lucide-react": "^0.400.0",
+    "mqtt": "^5.3.5",
+    "mqtt-packet": "^9.0.0",
+    "next": "^14.2.5",
+    "next-themes": "^0.3.0",
+    "path": "^0.12.7",
+    "react": "^18",
+    "react-dom": "^18",
+    "react-loader-spinner": "^6.1.6",
+    "react-markdown": "^9.0.1",
+    "remark-gfm": "^4.0.0",
+    "simple-peer": "^9.11.1",
+    "sonner": "^1.5.0",
+    "styled-components": "^6.1.11",
+    "tailwind-merge": "^2.4.0",
+    "tailwindcss-animate": "^1.0.7"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.4",
+    "postcss": "^8",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5"
+  }
+}

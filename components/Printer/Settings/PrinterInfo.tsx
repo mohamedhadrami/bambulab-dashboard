@@ -1,0 +1,1 @@
+// @/components/Printer/Settings/PrinterInfo.tsx

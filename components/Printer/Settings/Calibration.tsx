@@ -2,7 +2,7 @@
 
 import { printCalibration } from "@/services/bambuMqtt";
 import { MqttProps } from "@/types/bambuMqtt/consts";
-import { Button, Checkbox, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from "@nextui-org/react";
+import { Button, Checkbox, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from "@heroui/react";
 import { useState } from "react";
 
 interface CalibrationProps extends MqttProps { }

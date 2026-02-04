@@ -5,7 +5,7 @@ import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTr
 import { PanelRightOpen } from "lucide-react";
 import Calibration from "./Settings/Calibration";
 import VersionControl from "./Settings/VersionControl";
-import { Divider } from "@nextui-org/react";
+import { Divider } from "@heroui/react";
 import PrintOptions from "./Settings/PrintOptions";
 import { useState, useEffect } from "react";
 import HomeFlagValuesComponent from "./Settings/HomeFlagValues";

@@ -3,7 +3,7 @@
 import { extractFlags } from "@/services/utils";
 import { HomeFlagValues } from "@/types/bambuApi/consts";
 import { MqttProps } from "@/types/bambuMqtt/consts";
-import { Popover, PopoverTrigger, PopoverContent, Checkbox, Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@nextui-org/react";
+import { Popover, PopoverTrigger, PopoverContent, Checkbox, Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@heroui/react";
 import { Cog } from "lucide-react";
 import { useState, useEffect } from "react";
 

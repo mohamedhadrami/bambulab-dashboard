@@ -2,7 +2,7 @@
 
 import { getHmsSeverity, getHmsModule, hmsCode, wikiUrl } from "@/services/utils";
 import { DEVICE_ERROR, HMS_ERROR } from "@/types/bambuApi/HmsError";
-import { Card, CardBody, CardHeader, Chip, Link, Popover, PopoverContent, PopoverTrigger } from "@nextui-org/react";
+import { Card, CardBody, CardHeader, Chip, Link, Popover, PopoverContent, PopoverTrigger } from "@heroui/react";
 import { useEffect, useState } from "react";
 
 interface ErrorDetail {

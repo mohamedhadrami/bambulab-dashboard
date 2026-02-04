@@ -2,7 +2,7 @@
 
 import { HomeFlagValues } from "@/types/bambuApi/consts";
 import { MqttProps } from "@/types/bambuMqtt/consts";
-import { Checkbox, Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@nextui-org/react";
+import { Checkbox, Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@heroui/react";
 import { useState, useEffect } from "react";
 
 interface PrintOptionsProps extends MqttProps {

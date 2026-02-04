@@ -1,7 +1,7 @@
 // @/components/Tasks/TaskDetails.tsx
 
 import { BambuAmsDetailMapping, BambuTask, BambuTaskDetails, BambuTaskDetailsContextPlate } from "@/types/bambuApi/bambuTask"
-import { Card, CardBody, Image, Modal, ModalBody, ModalContent, ModalHeader, Tab, Tabs } from "@nextui-org/react"
+import { Card, CardBody, Image, Modal, ModalBody, ModalContent, ModalHeader, Tab, Tabs } from "@heroui/react"
 import { useEffect, useState } from "react";
 import { LineWave } from "react-loader-spinner";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "../ui/carousel";

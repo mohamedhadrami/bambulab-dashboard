@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from "react";
-import { Chip, Link, Navbar, NavbarBrand, NavbarContent, NavbarMenu, NavbarMenuItem, NavbarMenuToggle, Tooltip } from "@nextui-org/react";
+import { Chip, Link, Navbar, NavbarBrand, NavbarContent, NavbarMenu, NavbarMenuItem, NavbarMenuToggle, Tooltip } from "@heroui/react";
 import { useWebSocket } from '@/hooks/useWebSocket';
 import styled from 'styled-components';
 import packageInfo from "@/package.json";

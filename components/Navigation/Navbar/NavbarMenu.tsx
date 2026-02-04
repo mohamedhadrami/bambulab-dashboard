@@ -1,7 +1,7 @@
 // @/components/Navbar/CustomNavbarMenu.tsx
 
 import { BambuDevice, BambuProfile } from "@/types/bambuApi/bambuApi";
-import { Accordion, AccordionItem, Chip, Divider, Image, Link } from "@nextui-org/react";
+import { Accordion, AccordionItem, Chip, Divider, Image, Link } from "@heroui/react";
 import { NavigationItem } from "./Navbar";
 import useAuth from "@/hooks/useAuth";
 import { getProductImageURL } from "@/services/utils";

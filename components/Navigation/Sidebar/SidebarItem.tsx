@@ -2,7 +2,7 @@
 
 import { getProductImageURL } from "@/services/utils";
 import { BambuDevice } from "@/types/bambuApi/bambuApi";
-import { Accordion, AccordionItem, Chip, Divider, Link, Tooltip } from "@nextui-org/react";
+import { Accordion, AccordionItem, Chip, Divider, Link, Tooltip } from "@heroui/react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Check } from "lucide-react";
 import { cloneElement } from "react";

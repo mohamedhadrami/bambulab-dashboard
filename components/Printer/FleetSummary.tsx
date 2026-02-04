@@ -4,7 +4,7 @@
 "use client";
 
 import React from "react";
-import { Card, CardBody, CardHeader, Chip, Progress } from "@nextui-org/react";
+import { Card, CardBody, CardHeader, Chip, Progress } from "@heroui/react";
 import type { FleetStats } from "@/types/fleet";
 import { formatMinutes } from "@/services/utils";
 

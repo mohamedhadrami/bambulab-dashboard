@@ -1,7 +1,7 @@
 // @/components/Navbar/AccountAvatar.tsx
 
 import { BambuDevice, BambuProfile } from "@/types/bambuApi/bambuApi";
-import { Avatar, NavbarItem, Link, Popover, PopoverTrigger, PopoverContent } from "@nextui-org/react";
+import { Avatar, NavbarItem, Link, Popover, PopoverTrigger, PopoverContent } from "@heroui/react";
 import { UserRound } from "lucide-react";
 import { NavigationItem } from "./Navbar";
 import CustomNavbarMenu from "./NavbarMenu";

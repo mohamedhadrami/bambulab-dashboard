@@ -2,7 +2,7 @@
 
 import { printGcodeLine } from "@/services/bambuMqtt";
 import { MqttProps } from "@/types/bambuMqtt/consts";
-import { Popover, PopoverTrigger, Tooltip, PopoverContent, Button, Input } from "@nextui-org/react";
+import { Popover, PopoverTrigger, Tooltip, PopoverContent, Button, Input } from "@heroui/react";
 import { Check } from "lucide-react";
 import { useState } from "react";
 

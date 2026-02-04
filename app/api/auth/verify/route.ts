@@ -36,7 +36,9 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: false, error: "Code is required." }, { status: 400 });
   }
 
-  const pendingRaw = cookies().get("bambu_pending")?.value;
+  const cookieStore = await cookies();
+  const pendingRaw = cookieStore.get("bambu_pending")?.value;
+
   if (!pendingRaw) {
     return NextResponse.json(
       { ok: false, error: "No pending verification session. Please login again." },
@@ -67,7 +69,7 @@ export async function POST(request: Request) {
       let verifyData: any = {};
       try {
         verifyData = raw ? JSON.parse(raw) : {};
-      } catch {}
+      } catch { }
 
       console.log("[verifyCode] status:", verifyRes.status, "raw:", raw);
 
@@ -124,7 +126,7 @@ export async function POST(request: Request) {
       let tfaData: any = {};
       try {
         tfaData = raw ? JSON.parse(raw) : {};
-      } catch {}
+      } catch { }
 
       console.log("[tfa] status:", tfaRes.status, "raw:", raw);
 

@@ -2,7 +2,7 @@
 
 import { systemLedCtrl } from "@/services/bambuMqtt";
 import { MqttProps } from "@/types/bambuMqtt/consts";
-import { Tooltip, Button, Popover, PopoverTrigger, PopoverContent, Input, ButtonGroup } from "@nextui-org/react";
+import { Tooltip, Button, Popover, PopoverTrigger, PopoverContent, Input, ButtonGroup } from "@heroui/react";
 import { Check, ChevronDown, Lightbulb } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 

@@ -2,7 +2,7 @@
 
 import { printPrintSpeed } from "@/services/bambuMqtt";
 import { MqttProps, PrintSpeed, PrintSpeedName, PrintSpeedPercent } from "@/types/bambuMqtt/consts";
-import { Popover, PopoverTrigger, Tooltip, PopoverContent, RadioGroup, Divider, Radio } from "@nextui-org/react";
+import { Popover, PopoverTrigger, Tooltip, PopoverContent, RadioGroup, Divider, Radio } from "@heroui/react";
 import { Gauge } from "lucide-react";
 import { useMemo } from "react";
 

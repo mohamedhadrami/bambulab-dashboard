@@ -14,7 +14,8 @@ export async function GET(request: NextRequest) {
     const endpoint = `/v1/iot-service/api/user/bind`;
 
     try {
-        const accessToken = cookies().get('access_token')
+        const cookieStore = await cookies();
+        const accessToken = cookieStore.get('access_token')
 
         if (!accessToken) {
             return NextResponse.json({ error: 'Please login' }, { status: 401 });
@@ -24,7 +25,8 @@ export async function GET(request: NextRequest) {
             headers: {
                 'Authorization': `Bearer ${accessToken.value}`,
                 'Content-Type': 'application/json',
-            }
+            },
+            cache: "no-store",
         })
 
         if (!res.ok) {
@@ -33,7 +35,10 @@ export async function GET(request: NextRequest) {
 
         const data = await res.json();
 
-        cookies().set('printers', JSON.stringify(data.devices))
+        cookieStore.set("printers", JSON.stringify(data.devices ?? []), {
+            path: "/",
+            sameSite: "lax",
+        });
 
         return NextResponse.json({ status: 200, data });
     } catch (error) {

@@ -11,55 +11,62 @@ import AmsInfo from "@/components/Printer/AMS/AmsInfo";
 import { useWebSocket } from '@/hooks/useWebSocket';
 import { infoGetVersion, printPushStatus } from "@/services/bambuMqtt";
 import { BambuDevice } from "@/types/bambuApi/bambuApi";
-import { Button, Card, CardBody, CardFooter, CardHeader, Link, Divider } from "@nextui-org/react";
+import { Button, Card, CardBody, CardFooter, CardHeader, Link, Divider } from "@heroui/react";
 import React, { useEffect, useRef, useState } from "react";
 import PrintStatus from "@/components/Printer/PrintStatus";
 import { extractFlags } from "@/services/utils";
 import PrinterHeader from "@/components/Printer/PrinterHeader";
 import { HomeFlagValues } from "@/types/bambuApi/consts";
+import { useParams } from "next/navigation";
 
-const Page: React.FC<{ params: { slug: string } }> = ({ params }) => {
-    const [loading, setLoading] = useState<boolean>(true);
-    const [printers, setPrinters] = useState<any[]>([]);
-    const [printerExists, setPrinterExists] = useState<boolean>(false);
-    const [printer, setPrinter] = useState<BambuDevice>();
+const Page: React.FC = () => {
+  const { slug } = useParams<{ slug: string }>();
 
-    useEffect(() => {
-        setLoading(true);
-        const fetchData = async () => {
-            const res = await fetch('/api/cookies?param=printers');
-            const data = await res.json();
-            const printersList = JSON.parse(data.data.value);
-            setPrinters(printersList);
+  const [loading, setLoading] = useState(true);
+  const [printers, setPrinters] = useState<BambuDevice[]>([]);
+  const [printer, setPrinter] = useState<BambuDevice | null>(null);
+
+  // Fetch printers from API
+  useEffect(() => {
+    if (!slug) return;
+
+    setLoading(true);
+
+    (async () => {
+      try {
+        const res = await fetch("/api/bambulab/printers", {
+          cache: "no-store",
+        });
+
+        if (!res.ok) {
+          setPrinters([]);
+          return;
         }
-        fetchData();
-    }, []);
 
-    useEffect(() => {
-        if (printers.length > 0) {
-            const exists = printers.find(printer => printer.dev_id === params.slug);
-            setPrinterExists(exists !== undefined);
-            if (exists !== undefined) setPrinter(exists);
-        }
-        setLoading(false)
-    }, [printers, params.slug]);
+        const json = await res.json();
+        const devices: BambuDevice[] = json?.data?.devices ?? [];
 
-    return (
-        <>
-            {loading ? (
-                <LoadingSpinner />
-            ) : (printerExists ? (
-                printer && (
-                    <PrinterInfo id={params.slug} printer={printer} />
-                )
-            ) : (
-                <PrinterDNE id={params.slug} />
-            )
-            )}
-        </>
-    );
+        setPrinters(devices);
 
-}
+        const found = devices.find((p) => p.dev_id === slug);
+        setPrinter(found ?? null);
+      } catch (err) {
+        console.error("Failed to fetch printers:", err);
+        setPrinters([]);
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, [slug]);
+
+  if (loading) return <LoadingSpinner />;
+
+  if (!printer) {
+    return <PrinterDNE id={slug ?? ""} />;
+  }
+
+  return <PrinterInfo id={slug!} printer={printer} />;
+};
 
 export default Page;
 
@@ -174,7 +181,7 @@ const PrinterInfo: React.FC<{ id: string, printer: BambuDevice }> = ({ id, print
                 />
             </div>
         </div>
-    );  
+    );
 
 };
 

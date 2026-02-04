@@ -3,7 +3,7 @@
 "use client";
 
 import React from "react";
-import { Card, CardBody, Chip, Image, Progress, Link } from "@nextui-org/react";
+import { Card, CardBody, Chip, Image, Progress, Link } from "@heroui/react";
 import type { BambuDevice } from "@/types/bambuApi/bambuApi";
 import type { FleetPrinterState } from "@/types/fleet";
 import { clamp, formatMinutes, getProductImageURL, isLowWifi } from "@/services/utils";

@@ -17,7 +17,8 @@ export async function GET(request: NextRequest) {
     const endpoint = `/v1/iot-service/api/slicer/resource?${queryParams}`;
 
     try {
-        const accessToken = cookies().get('access_token')
+        const cookieStore = await cookies();
+        const accessToken = cookieStore.get('access_token')
 
         if (!accessToken) {
             return NextResponse.json({ status: 401, error: 'Please login' });

@@ -2,7 +2,7 @@
 
 "use client";
 import { CURRENT_STAGE_OPTIONS, FanType, getPrintSpeedEnum, MqttProps, PrintSpeed } from "@/types/bambuMqtt/consts";
-import { Card, CardHeader, CardBody } from "@nextui-org/react";
+import { Card, CardHeader, CardBody } from "@heroui/react";
 import { Bed, Box, Syringe } from "lucide-react";
 import { useState, useEffect } from "react";
 import PrinterFan from "./PrinterFan";

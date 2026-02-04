@@ -2,7 +2,7 @@
 
 import { printGcodeLine } from "@/services/bambuMqtt";
 import { MqttProps } from "@/types/bambuMqtt/consts";
-import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from "@nextui-org/react";
+import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from "@heroui/react";
 import { ArrowDown, ArrowUp, ChevronDown, ChevronLeft, ChevronRight, ChevronsDown, ChevronsLeft, ChevronsRight, ChevronsUp, ChevronUp, Home } from "lucide-react";
 
 interface AxisControlProps extends MqttProps {

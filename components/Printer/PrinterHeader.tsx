@@ -2,7 +2,7 @@
 
 import { getProductImageURL } from "@/services/utils";
 import { MqttProps } from "@/types/bambuMqtt/consts";
-import { Tooltip, Button, Image, Chip } from "@nextui-org/react";
+import { Tooltip, Button, Image, Chip } from "@heroui/react";
 import { RefreshCcw, Signal, SignalHigh, SignalLow, SignalMedium, WifiOff } from "lucide-react";
 import SyncDelay from "./SyncDelay";
 import { BambuDevice } from "@/types/bambuApi/bambuApi";

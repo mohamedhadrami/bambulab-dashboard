@@ -2,7 +2,7 @@
 
 import { printGcodeLine } from "@/services/bambuMqtt";
 import { MqttProps } from "@/types/bambuMqtt/consts";
-import { useDisclosure, Button, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Textarea } from "@nextui-org/react";
+import { useDisclosure, Button, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Textarea } from "@heroui/react";
 import { useState } from "react";
 
 interface CustomGcodeProps extends MqttProps { }

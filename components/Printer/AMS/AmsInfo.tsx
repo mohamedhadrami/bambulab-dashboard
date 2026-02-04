@@ -1,6 +1,6 @@
 // @/components/Printer/AmsInfo.tsx
 
-import { Card, CardBody, CardHeader } from "@nextui-org/react";
+import { Card, CardBody, CardHeader } from "@heroui/react";
 import { Droplets, Thermometer } from "lucide-react";
 import AMSOptions from "./AMSOptions";
 import { MqttProps } from "@/types/bambuMqtt/consts";

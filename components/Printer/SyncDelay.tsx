@@ -1,6 +1,6 @@
 // @/components/Printer/SyncDelay.tsx
 
-import { Chip, Tooltip } from '@nextui-org/react';
+import { Chip, Tooltip } from "@heroui/react";
 import { Timer } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 

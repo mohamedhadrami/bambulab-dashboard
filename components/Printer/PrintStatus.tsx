@@ -3,7 +3,7 @@
 import { convertMinutesToTimeString, extractFlags } from "@/services/utils";
 import { HomeFlagValues } from "@/types/bambuApi/consts";
 import { CURRENT_STAGE_IDS, MqttProps } from "@/types/bambuMqtt/consts";
-import { Button, Card, CardBody, CardHeader, Progress } from "@nextui-org/react"
+import { Button, Card, CardBody, CardHeader, Progress } from "@heroui/react"
 import { Pause, Square, StepForward } from "lucide-react";
 import { useEffect, useState } from "react";
 

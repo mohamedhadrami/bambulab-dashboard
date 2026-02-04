@@ -2,7 +2,7 @@
 
 "use client";
 
-import { Card, CardBody, ScrollShadow, Button } from "@nextui-org/react";
+import { Card, CardBody, ScrollShadow, Button } from "@heroui/react";
 import { useEffect } from "react";
 
 const GlobalError: React.FC<{

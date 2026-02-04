@@ -1,7 +1,7 @@
 // @/components/Printer/AMS/Filament.tsx
 
 import { MqttProps } from "@/types/bambuMqtt/consts";
-import { Button, Card, CardBody, CardFooter, CardHeader, Divider, Input, Popover, PopoverContent, PopoverTrigger } from "@nextui-org/react";
+import { Button, Card, CardBody, CardFooter, CardHeader, Divider, Input, Popover, PopoverContent, PopoverTrigger } from "@heroui/react";
 import { Check } from "lucide-react";
 import { useEffect, useState } from "react";
 

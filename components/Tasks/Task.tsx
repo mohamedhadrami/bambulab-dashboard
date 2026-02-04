@@ -1,7 +1,7 @@
 // @/components/Tasks/Task.tsx
 
 import { BambuTask } from "@/types/bambuApi/bambuTask"
-import { Card, CardBody, CardFooter, CardHeader, Image, useDisclosure } from "@nextui-org/react"
+import { Card, CardBody, CardFooter, CardHeader, Image, useDisclosure } from "@heroui/react"
 import TaskDetails from "./TaskDetails";
 
 interface TaskProps {

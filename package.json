@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@monaco-editor/react": "^4.6.0",
-    "@nextui-org/react": "^2.4.2",
+    "@heroui/react": "2.8.8",
     "@radix-ui/react-dialog": "^1.1.1",
     "@radix-ui/react-slot": "^1.1.0",
     "@radix-ui/react-toast": "^1.2.1",
@@ -25,7 +25,7 @@
     "lucide-react": "^0.400.0",
     "mqtt": "^5.3.5",
     "mqtt-packet": "^9.0.0",
-    "next": "^14.2.5",
+    "next": "^16.1.6",
     "next-themes": "^0.3.0",
     "path": "^0.12.7",
     "react": "^18",
@@ -44,7 +44,7 @@
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "eslint": "^8",
-    "eslint-config-next": "14.2.4",
+    "eslint-config-next": "^16.1.6",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"

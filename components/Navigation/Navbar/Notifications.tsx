@@ -1,7 +1,7 @@
 // @/componentss/Navbar/Notifications.tsx
 
 import { BambuMessage } from "@/types/bambuApi/bambuApi"
-import { Badge, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, CardBody, Card, Divider, DropdownSection, Image } from "@nextui-org/react"
+import { Badge, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, CardBody, Card, Divider, DropdownSection, Image } from "@heroui/react"
 import { Bell } from "lucide-react"
 import React, { useEffect, useState } from "react"
 

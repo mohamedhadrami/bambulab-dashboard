@@ -6,7 +6,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useTheme } from "next-themes";
 import { CircleArrowRight, CircleArrowLeft, House, BrainCircuit, Settings, Info, Rocket, Sun, Moon, Printer, ClipboardList, Kanban, UserRound } from "lucide-react";
 import { motion } from "framer-motion";
-import { Button, Tooltip } from "@nextui-org/react";
+import { Button, Tooltip } from "@heroui/react";
 import { usePathname } from "next/navigation";
 import SidebarItem from "./SidebarItem";
 import { BambuDevice } from "@/types/bambuApi/bambuApi";

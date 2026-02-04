@@ -3,7 +3,7 @@
 "use client";
 
 import React from "react";
-import { Card, CardBody, CardHeader } from "@nextui-org/react";
+import { Card, CardBody, CardHeader } from "@heroui/react";
 import FleetSummary from "@/components/Printer/FleetSummary";
 import PrinterCard from "@/components/Printer/PrinterCard";
 import { useFleetPrinters } from "@/hooks/useFleetPrinters";

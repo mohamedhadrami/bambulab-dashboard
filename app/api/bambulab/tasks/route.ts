@@ -19,7 +19,8 @@ export async function GET(request: NextRequest) {
     const endpoint = `/v1/user-service/my/tasks?${queryParams}`;
 
     try {
-        const accessToken = cookies().get('access_token')
+        const cookieStore = await cookies();
+        const accessToken = cookieStore.get('access_token')
 
         if (!accessToken) {
             return NextResponse.json({ error: 'Please login' }, { status: 401 });

@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, Card, CardBody, Radio, RadioGroup, Select, SelectItem, Selection } from '@nextui-org/react';
+import { Button, Card, CardBody, Radio, RadioGroup, Select, SelectItem, Selection } from "@heroui/react";
 import React, { useEffect, useRef, useState } from 'react';
 import { useWebSocket } from '@/hooks/useWebSocket';
 import { BambuDevice } from '@/types/bambuApi/bambuApi';

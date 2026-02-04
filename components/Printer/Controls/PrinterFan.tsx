@@ -2,7 +2,7 @@
 
 import { printGcodeLine } from "@/services/bambuMqtt";
 import { FanType, FanTypeToID, FanTypeMax, MqttProps } from "@/types/bambuMqtt/consts";
-import { ButtonGroup, Button, Switch } from "@nextui-org/react";
+import { ButtonGroup, Button, Switch } from "@heroui/react";
 import { Fan, Minus, Plus } from "lucide-react";
 import { useState, useEffect, useMemo } from "react";
 

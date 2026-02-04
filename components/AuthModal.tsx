@@ -10,7 +10,7 @@ import {
   Checkbox,
   Input,
   Tooltip,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import useAuth from "@/hooks/useAuth";
 import { MailIcon, EyeOff, Eye, KeyRound } from "lucide-react";
 

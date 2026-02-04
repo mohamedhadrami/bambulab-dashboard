@@ -3,7 +3,7 @@
 "use client"
 
 import React, { useEffect, useState, useMemo } from "react";
-import { Button, getKeyValue, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from "@nextui-org/react";
+import { Button, getKeyValue, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from "@heroui/react";
 import { Download } from "lucide-react";
 
 const columns = [

@@ -82,3 +82,38 @@ export const wikiUrl = (attr: number, code: number) => {
   }
   return "";
 }
+
+export function getDevIdFromTopic(topic: string): string | null {
+  const parts = topic.split("/");
+  if (parts.length < 3) return null;
+  if (parts[0] !== "device") return null;
+  return parts[1] ?? null;
+}
+
+export function numberOrUndefined(v: any): number | undefined {
+  if (v === null || v === undefined) return undefined;
+  const n = typeof v === "number" ? v : parseFloat(String(v));
+  return Number.isFinite(n) ? n : undefined;
+}
+
+export function isLowWifi(rssi: string): boolean {
+  const v = parseInt(rssi.replace("dBm", "").trim(), 10);
+  return Number.isFinite(v) ? v <= -70 : false;
+}
+
+export function formatMinutes(min: number): string {
+  const total = Math.max(0, Math.floor(min));
+  const h = Math.floor(total / 60);
+  const m = total % 60;
+  if (h <= 0) return `${m}m`;
+  return `${h}h ${m}m`;
+}
+
+export function clamp(n: number, min: number, max: number): number {
+  return Math.min(max, Math.max(min, n));
+}
+
+export function isDoorOpenFromHomeFlag(homeFlag: any): boolean {
+  if (Array.isArray(homeFlag)) return homeFlag.includes(HomeFlagValues.DOOR_OPEN);
+  return false;
+}

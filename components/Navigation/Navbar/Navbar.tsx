@@ -105,7 +105,7 @@ const CustomNavbar: React.FC = () => {
 
   useEffect(() => {
     const checkAuth = async () => {
-      const res = await fetch('/api/cookies?param=token');
+      const res = await fetch('/api/cookies?param=access_token');
       if (res.status === 200) {
         setIsLoggedIn(true);
       }

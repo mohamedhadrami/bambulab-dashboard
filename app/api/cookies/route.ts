@@ -7,7 +7,7 @@ export async function GET(request: NextRequest) {
 
     try {
         if (!param) {
-            throw new Error('Must include a query param, param. For example, /api/cookies?param=token');
+            throw new Error('Must include a query param, param. For example, /api/cookies?param=access_token');
         }
 
         const data = cookies().get(param);

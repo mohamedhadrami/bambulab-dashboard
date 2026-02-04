@@ -3,192 +3,221 @@ const mqtt = require("mqtt");
 
 const wss = new WebSocket.Server({ port: 8080 });
 
+const API_BASE = "https://api.bambulab.com";
+const PROFILE_ENDPOINT = "/v1/user-service/my/profile"; // used to get user id
+
+async function getUserId(accessToken) {
+  const res = await fetch(`${API_BASE}${PROFILE_ENDPOINT}`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      "Content-Type": "application/json",
+    },
+  });
+
+  const raw = await res.text();
+  let data = {};
+  try { data = raw ? JSON.parse(raw) : {}; } catch {}
+
+  if (!res.ok) {
+    throw new Error(`Profile lookup failed (${res.status}): ${data?.message || raw || "unknown"}`);
+  }
+
+  // Field names vary by implementation; handle common ones.
+  const userId =
+    data?.uid ??
+    data?.userId ??
+    data?.data?.uid ??
+    data?.data?.userId;
+
+  if (!userId) {
+    throw new Error(`Could not find user id in profile response: ${raw}`);
+  }
+
+  return String(userId);
+}
+
 wss.on("connection", (ws) => {
   console.log("WebSocket client connected");
-  let mqttClient;
-  ws.subscriptions = []; // Initialize subscriptions list
 
-  ws.on("message", (message) => {
-    const data = JSON.parse(message);
-    const { id, action, username, password, topic, command } = data;
+  let mqttClient = null;
+  ws.subscriptions = [];
 
-    if (action === "connect") {
-      if (mqttClient) {
-        mqttClient.end();
-      }
-      mqttClient = mqtt.connect("mqtts://us.mqtt.bambulab.com", {
-        port: 8883,
-        username: username,
-        password: password,
-        protocol: "mqtts",
-        rejectUnauthorized: false,
-      });
-
-      mqttClient.on("connect", () => {
-        console.log("Connected to MQTT broker");
-        ws.send(
-          JSON.stringify({
-            action: "mqtt_connected",
-            message: "Connected to MQTT broker",
-          })
-        );
-      });
-
-      mqttClient.on("error", (err) => {
-        console.error("MQTT connection error:", err);
-        ws.send(
-          JSON.stringify({
-            error: "MQTT connection error",
-            details: err.message,
-          })
-        );
-      });
-
-      mqttClient.on("message", (topic, message) => {
-        wss.clients.forEach((client) => {
-          if (
-            client.subscriptions.includes(topic) &&
-            client.readyState === WebSocket.OPEN
-          ) {
-            client.send(JSON.stringify({ topic, message: message.toString() }));
-          }
-        });
-      });
-
-      mqttClient.on("close", () => {
-        console.log("MQTT connection closed");
-        ws.send(
-          JSON.stringify({
-            action: "mqtt_disconnected",
-            message: "MQTT connection closed",
-          })
-        );
-      });
-
-      mqttClient.on("reconnect", () => {
-        console.log("Reconnecting to MQTT broker");
-        ws.send(JSON.stringify({ message: "Reconnecting to MQTT broker" }));
-      });
+  ws.on("message", async (message) => {
+    let data;
+    try {
+      data = JSON.parse(message.toString());
+    } catch (e) {
+      ws.send(JSON.stringify({ error: "Invalid JSON", details: String(e) }));
+      return;
     }
 
-    if (action === "subscribe") {
-      if (mqttClient) {
-        mqttClient.subscribe(topic, (err) => {
-          if (err) {
-            console.error(`Subscription error: ${err}`);
-            ws.send(
-              JSON.stringify({
-                error: "Subscription error",
-                details: err.message,
-              })
-            );
-          } else {
-            console.log(`Subscribed to topic ${topic}`);
-            if (!ws.subscriptions.includes(topic)) {
-              ws.subscriptions.push(topic);
+    const { action, topic, id, command, accessToken } = data;
+
+    try {
+      switch (action) {
+        case "connect": {
+          if (!accessToken) {
+            ws.send(JSON.stringify({ action: "mqtt_error", error: "Missing accessToken" }));
+            return;
+          }
+
+          // Tear down any existing connection for this WS client
+          if (mqttClient) {
+            mqttClient.end(true);
+            mqttClient = null;
+          }
+
+          ws.send(JSON.stringify({ action: "mqtt_status", message: "Resolving MQTT username..." }));
+
+          const userId = await getUserId(accessToken);
+          const mqttUsername = `u_${userId}`; // cloud MQTT username format :contentReference[oaicite:1]{index=1}
+
+          ws.send(JSON.stringify({ action: "mqtt_status", message: `Connecting as ${mqttUsername}...` }));
+
+          mqttClient = mqtt.connect("mqtts://us.mqtt.bambulab.com:8883", {
+            username: mqttUsername,
+            password: accessToken,
+            protocol: "mqtts",
+            rejectUnauthorized: false, // dev
+            keepalive: 30,
+            reconnectPeriod: 2000,
+          });
+
+          mqttClient.on("connect", () => {
+            ws.send(JSON.stringify({ action: "mqtt_connected", message: "Connected to MQTT broker" }));
+          });
+
+          mqttClient.on("error", (err) => {
+            ws.send(JSON.stringify({ action: "mqtt_error", error: "MQTT connection error", details: err.message }));
+          });
+
+          mqttClient.on("close", () => {
+            ws.send(JSON.stringify({ action: "mqtt_disconnected", message: "MQTT connection closed" }));
+            ws.subscriptions = [];
+          });
+
+          mqttClient.on("reconnect", () => {
+            ws.send(JSON.stringify({ action: "mqtt_status", message: "Reconnecting to MQTT broker" }));
+          });
+
+          mqttClient.on("message", (t, payload) => {
+            // Send ONLY to this WS client (no leaking across clients)
+            if (ws.readyState === WebSocket.OPEN && ws.subscriptions.includes(t)) {
+              ws.send(JSON.stringify({ topic: t, message: payload.toString() }));
             }
-            ws.send(
-              JSON.stringify({
-                action: "subscriptions",
-                message: `Subscribed to topic ${topic}`,
-                topics: ws.subscriptions,
-              })
-            );
-          }
-        });
-      }
-    }
+          });
 
-    if (action === "unsubscribe") {
-      if (mqttClient) {
-        mqttClient.unsubscribe(topic, (err) => {
-          if (err) {
-            console.error(`Unsubscribe error: ${err}`);
-            ws.send(
-              JSON.stringify({
-                error: "Unsubscribe error",
-                details: err.message,
-              })
-            );
-          } else {
-            console.log(`Unsubscribed from topic ${topic}`);
-            ws.subscriptions = ws.subscriptions.filter((sub) => sub !== topic);
-            ws.send(
-              JSON.stringify({
-                action: "subscriptions",
-                message: `Unsubscribed from topic ${topic}`,
-                topics: ws.subscriptions,
-              })
-            );
-          }
-        });
-      }
-    }
-
-    if (action === "disconnect") {
-      if (mqttClient) {
-        mqttClient.end();
-        console.log("Disconnected from MQTT broker");
-        ws.send(JSON.stringify({ message: "Disconnected from MQTT broker" }));
-      }
-    }
-
-    if (action === "publish") {
-      if (mqttClient) {
-        if (id) {
-          if (command) {
-            const pubOptions = {
-              qos: 1,
-              retain: false,
-              properties: {
-                payloadFormatIndicator: true,
-                contentType: "application/json",
-              },
-            };
-            mqttClient.publish(
-              `device/${id}/request`,
-              JSON.stringify(command),
-              pubOptions,
-              function (error) {
-                if (error) {
-                  console.error("Error publishing request:", error);
-                  ws.send(
-                    JSON.stringify({
-                      message: `Error publishing request: ${error}`,
-                    })
-                  );
-                }
-              }
-            );
-          } else {
-            ws.send(
-              JSON.stringify({
-                message: "Must provide a command for publishing",
-              })
-            );
-          }
+          return;
         }
-      } else {
-        ws.send(
-          JSON.stringify({
-            message: "Must provide id for publishing",
-          })
-        );
+
+        case "subscribe": {
+          if (!mqttClient) {
+            ws.send(JSON.stringify({ action: "mqtt_error", error: "MQTT not connected" }));
+            return;
+          }
+          if (!topic) {
+            ws.send(JSON.stringify({ error: "Missing topic" }));
+            return;
+          }
+
+          mqttClient.subscribe(topic, (err) => {
+            if (err) {
+              ws.send(JSON.stringify({ action: "mqtt_error", error: "Subscription error", details: err.message }));
+              return;
+            }
+            if (!ws.subscriptions.includes(topic)) ws.subscriptions.push(topic);
+
+            ws.send(JSON.stringify({
+              action: "subscriptions",
+              message: `Subscribed to ${topic}`,
+              topics: ws.subscriptions,
+            }));
+          });
+
+          return;
+        }
+
+        case "unsubscribe": {
+          if (!mqttClient) {
+            ws.send(JSON.stringify({ action: "mqtt_error", error: "MQTT not connected" }));
+            return;
+          }
+          if (!topic) {
+            ws.send(JSON.stringify({ error: "Missing topic" }));
+            return;
+          }
+
+          mqttClient.unsubscribe(topic, (err) => {
+            if (err) {
+              ws.send(JSON.stringify({ action: "mqtt_error", error: "Unsubscribe error", details: err.message }));
+              return;
+            }
+            ws.subscriptions = ws.subscriptions.filter((sub) => sub !== topic);
+
+            ws.send(JSON.stringify({
+              action: "subscriptions",
+              message: `Unsubscribed from ${topic}`,
+              topics: ws.subscriptions,
+            }));
+          });
+
+          return;
+        }
+
+        case "publish": {
+          if (!mqttClient) {
+            ws.send(JSON.stringify({ action: "mqtt_error", error: "MQTT not connected" }));
+            return;
+          }
+          if (!id) {
+            ws.send(JSON.stringify({ error: "Must provide id for publishing" }));
+            return;
+          }
+          if (!command) {
+            ws.send(JSON.stringify({ error: "Must provide a command for publishing" }));
+            return;
+          }
+
+          const pubOptions = {
+            qos: 1,
+            retain: false,
+            properties: {
+              payloadFormatIndicator: true,
+              contentType: "application/json",
+            },
+          };
+
+          mqttClient.publish(`device/${id}/request`, JSON.stringify(command), pubOptions, (error) => {
+            if (error) {
+              ws.send(JSON.stringify({ error: "Error publishing request", details: error.message }));
+            }
+          });
+
+          return;
+        }
+
+        case "disconnect": {
+          if (mqttClient) {
+            mqttClient.end(true);
+            mqttClient = null;
+          }
+          ws.subscriptions = [];
+          ws.send(JSON.stringify({ action: "mqtt_disconnected", message: "Disconnected from MQTT broker" }));
+          return;
+        }
+
+        default:
+          ws.send(JSON.stringify({ error: "Unknown action", action }));
+          return;
       }
-    } else {
-      ws.send(
-        JSON.stringify({
-          message: "MQTT Client not setup and/or connected",
-        })
-      );
+    } catch (e) {
+      ws.send(JSON.stringify({ action: "server_error", error: String(e?.message || e) }));
     }
   });
 
   ws.on("close", () => {
     console.log("WebSocket client disconnected");
-    if (mqttClient) {
-      mqttClient.end();
-    }
+    if (mqttClient) mqttClient.end(true);
   });
 });
 

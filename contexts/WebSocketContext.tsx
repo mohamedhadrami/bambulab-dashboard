@@ -87,35 +87,24 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     }, []);
 
     const fetchCookies = async (socket: WebSocket) => {
-        const usernameRes = await fetch('/api/cookies?param=username');
-        const tokenRes = await fetch('/api/cookies?param=access_token');
-        const printersRes = await fetch('/api/cookies?param=printers');
+        const tokenRes = await fetch("/api/cookies?param=access_token");
+        const printersRes = await fetch("/api/cookies?param=printers");
 
-        if (usernameRes.ok && tokenRes.ok) {
-            const username = await usernameRes.json();
-            const accessToken = await tokenRes.json();
+        if (tokenRes.ok) {
+            const tokenJson = await tokenRes.json();
+            const accessToken = tokenJson?.data?.value;
 
-            if (username && accessToken) {
-                handleConnect(socket, username.data.value, accessToken.data.value);
-            }
-
-            if (printersRes.ok) {
-                const printers = await printersRes.json();
-                if (printers && printers.data.value) {
-                    const devices: BambuDevice[] = JSON.parse(printers.data.value);
-                    setPrinters(devices)
-                    /*devices.forEach((device: any) => {
-                        handleSubscribe(socket, `device/${device.dev_id}/report`);
-                        handleSubscribe(socket, `device/${device.dev_id}/request`);
-                    });*/
-                }
+            if (accessToken) {
+                socket.send(JSON.stringify({ action: "connect", accessToken }));
             }
         }
-    };
 
-    const handleConnect = (socket: WebSocket, username: string, password: string) => {
-        if (socket) {
-            socket.send(JSON.stringify({ action: 'connect', username, password }));
+        if (printersRes.ok) {
+            const printers = await printersRes.json();
+            if (printers?.data?.value) {
+                const devices = JSON.parse(printers.data.value);
+                setPrinters(devices);
+            }
         }
     };
 
